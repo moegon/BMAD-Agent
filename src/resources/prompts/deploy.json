@@ -1,0 +1,28 @@
+{
+  "phase": "deploy",
+  "summary": "Prepare validation, launch activities, and feedback loops for sustained value.",
+  "guidelines": [
+    "Define acceptance tests, validation techniques, and monitoring needs.",
+    "Plan rollout sequencing and communication cadences.",
+    "Capture post-launch review checkpoints.",
+    "Ensure rollback or mitigation plans are documented."
+  ],
+  "questions": [
+    "What signals confirm the launch is healthy?",
+    "Which teams or channels need go-live communication?",
+    "How will we collect and act on feedback after release?"
+  ],
+  "checklist": [
+    "Validate test coverage matches success criteria.",
+    "Coordinate rollout plan with stakeholders and support.",
+    "Define monitoring dashboards or alert policies."
+  ],
+  "deliverables": [
+    "Validation and QA playbook",
+    "Launch communications plan",
+    "Post-launch review cadence"
+  ],
+  "references": [
+    "https://github.com/bmad-code-org/BMAD-METHOD/blob/main/deploy/README.md"
+  ]
+}

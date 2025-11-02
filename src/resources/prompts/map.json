@@ -1,0 +1,28 @@
+{
+  "phase": "map",
+  "summary": "Inventory domain knowledge, assets, and constraints that inform execution.",
+  "guidelines": [
+    "List source repositories, data stores, APIs, and documents involved.",
+    "Identify risks, constraints, and dependencies.",
+    "Highlight knowledge gaps that need rapid research.",
+    "Capture compliance or governance requirements."
+  ],
+  "questions": [
+    "What systems or services exchange data with this effort?",
+    "Which repositories or branches hold authoritative code?",
+    "Are there service-level objectives or compliance thresholds to respect?"
+  ],
+  "checklist": [
+    "Verify documentation links and access.",
+    "Confirm availability of test or sandbox environments.",
+    "Surface dependencies on external teams or vendors."
+  ],
+  "deliverables": [
+    "Architecture/context diagram",
+    "Constraint and risk register",
+    "Open questions and research backlog"
+  ],
+  "references": [
+    "https://github.com/bmad-code-org/BMAD-METHOD/blob/main/map/README.md"
+  ]
+}

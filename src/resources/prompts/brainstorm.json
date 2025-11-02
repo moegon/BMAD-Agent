@@ -1,0 +1,28 @@
+{
+  "phase": "brainstorm",
+  "summary": "Clarify the vision, constraints, and stakeholders before delivery begins.",
+  "guidelines": [
+    "Capture the problem statement in one sentence.",
+    "Articulate primary beneficiaries and stakeholders.",
+    "Outline success metrics or signals of value.",
+    "Record blockers that could prevent kickoff."
+  ],
+  "questions": [
+    "Which teams or leaders are sponsoring this initiative?",
+    "What user pains or opportunities motivated the effort?",
+    "How will we know if the initiative should stop or pivot?"
+  ],
+  "checklist": [
+    "Align on scope boundary and exclusions.",
+    "Document decision-makers and approvers.",
+    "Note external deadlines or events that influence timing."
+  ],
+  "deliverables": [
+    "Problem and opportunity overview",
+    "Primary stakeholder roster",
+    "Success metrics or evaluation heuristics"
+  ],
+  "references": [
+    "https://github.com/bmad-code-org/BMAD-METHOD/blob/main/brainstorm/README.md"
+  ]
+}

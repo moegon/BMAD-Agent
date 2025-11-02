@@ -1,0 +1,28 @@
+{
+  "phase": "assemble",
+  "summary": "Plan delivery by sequencing tasks, selecting tooling, and shaping artifacts.",
+  "guidelines": [
+    "Break the effort into milestones with clear outcomes.",
+    "Choose implementation languages, frameworks, and delivery tooling.",
+    "Document assumptions and fallback options.",
+    "Validate dependencies align with organizational constraints."
+  ],
+  "questions": [
+    "Which milestones unlock measurable progress?",
+    "What tooling or environments need to be provisioned?",
+    "Where can we reuse existing components or patterns?"
+  ],
+  "checklist": [
+    "Sequence work items with owners and time frames.",
+    "Outline CI/CD and testing strategies.",
+    "Schedule regular demos or alignment checkpoints."
+  ],
+  "deliverables": [
+    "Milestone roadmap",
+    "Implementation playbook",
+    "Tooling and environment readiness list"
+  ],
+  "references": [
+    "https://github.com/bmad-code-org/BMAD-METHOD/blob/main/assemble/README.md"
+  ]
+}

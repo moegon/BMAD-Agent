@@ -1,0 +1,149 @@
+{
+  "name": "bmad-agent",
+  "displayName": "BMAD Agent",
+  "description": "BMAD-METHOD guided Copilot agent for VS Code",
+  "version": "0.0.2",
+  "publisher": "bmad-code-org",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bmad-code-org/BMAD-Agent"
+  },
+  "icon": "media/icon.png",
+  "galleryBanner": {
+    "color": "#1e1e2e",
+    "theme": "dark"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onChatParticipant:bmad.agent",
+    "onChatParticipant:bmad.lmchat",
+    "onView:bmad.controlPanel",
+    "onView:bmad.lmChatView",
+    "onCommand:bmad.pushLmChatToCopilot"
+  ],
+  "contributes": {
+    "configuration": {
+      "title": "BMAD Agent",
+      "properties": {
+        "bmadAgent.preferredModel": {
+          "type": "string",
+          "enum": [
+            "copilot",
+            "lmstudio"
+          ],
+          "default": "copilot",
+          "description": "Select the downstream model BMAD Agent should use by default. Leave unset to be prompted on first use."
+        },
+        "bmadAgent.copilotModelId": {
+          "type": "string",
+          "default": "",
+          "description": "Optional Copilot chat model identifier to use when delegating BMAD summaries."
+        },
+        "bmadAgent.lmStudio.url": {
+          "type": "string",
+          "default": "http://127.0.0.1:1234/v1",
+          "description": "Base URL for the LM Studio OpenAI-compatible endpoint."
+        },
+        "bmadAgent.lmStudio.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "API key for LM Studio when the endpoint requires authorization."
+        },
+        "bmadAgent.lmStudio.model": {
+          "type": "string",
+          "default": "lmstudio",
+          "description": "Model identifier to pass to the LM Studio chat completions endpoint."
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "bmad.generateScaffolding",
+        "title": "BMAD: Generate Scaffolding"
+      },
+      {
+        "command": "bmad.refinePhase",
+        "title": "BMAD: Refine Current Phase"
+      },
+      {
+        "command": "bmad.pushLmChatToCopilot",
+        "title": "BMAD: Copy Latest LM Studio Context to Copilot"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "bmad.explorer",
+          "title": "BMAD",
+          "icon": "media/icon.png"
+        }
+      ]
+    },
+    "views": {
+      "bmad.explorer": [
+        {
+          "id": "bmad.controlPanel",
+          "name": "Control Panel",
+          "type": "webview"
+        },
+        {
+          "id": "bmad.lmChatView",
+          "name": "LM Studio Chat",
+          "type": "webview"
+        }
+      ]
+    },
+    "chatParticipants": [
+      {
+        "id": "bmad.agent",
+        "name": "bmad",
+        "label": "BMAD Agent",
+        "description": "Guides BMAD-METHOD discovery and primes Copilot with the results.",
+        "isDefault": false,
+        "samples": [
+          "start bmad project",
+          "run bmad kickoff"
+        ]
+      },
+      {
+        "id": "bmad.lmchat",
+        "name": "bmad.lmchat",
+        "label": "BMAD Context Bridge",
+        "description": "Injects the latest BMAD + LM Studio context into Copilot chat.",
+        "isDefault": false,
+        "samples": [
+          "pull latest bmad context"
+        ]
+      }
+    ]
+  },
+  "main": "./dist/extension.js",
+  "scripts": {
+    "prepare": "npm run compile",
+    "compile": "tsc -p . && npm run copy:resources",
+    "watch": "tsc -w -p .",
+    "lint": "eslint src --ext ts",
+    "pretest": "npm run compile",
+    "test": "node ./dist/test/runTest.js",
+    "smoke": "npm run compile && node scripts/smoke.js",
+    "smoke:lmstudio": "npm run compile && node scripts/smokeLmStudio.js",
+    "copy:resources": "node scripts/copyResources.js"
+  },
+  "devDependencies": {
+    "@types/glob": "^8.1.0",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "^18.19.0",
+    "@types/vscode": "^1.90.0",
+    "@vscode/test-electron": "^2.3.9",
+    "eslint": "^9.4.0",
+    "glob": "^10.3.10",
+    "mocha": "^10.4.0",
+    "typescript": "^5.4.0"
+  },
+  "dependencies": {}
+}
