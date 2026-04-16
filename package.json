@@ -2,7 +2,7 @@
   "name": "bmad-agent",
   "displayName": "BMAD Agent",
   "description": "BMAD-METHOD guided Copilot agent for VS Code",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "publisher": "bmad-code-org",
   "engines": {
     "vscode": "^1.90.0"

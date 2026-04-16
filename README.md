@@ -4,6 +4,18 @@ BMAD Agent wraps the [BMAD-METHOD](https://github.com/bmad-code-org/BMAD-METHOD)
 
 ![BMAD Agent Icon](media/icon.png)
 
+## IDE Support
+
+BMAD Agent works across multiple AI-powered IDEs:
+
+| IDE | Support | Configuration |
+|-----|---------|---------------|
+| **VS Code** | Native extension | Install via VSIX or Extension Development Host |
+| **Cursor** | Rules + extension | `.cursorrules` and `.cursor/rules/*.mdc` provide project context |
+| **Google Antigravity** | Rules + extension | `.agents/rules/*.md` and `.agents/workflows/*.md` guide agents |
+
+Since Cursor and Antigravity are VS Code forks, the extension runs natively in both. The included rule files give each IDE's AI agent full awareness of the BMAD workflow, project architecture, and coding standards.
+
 ## Features
 - `@bmad.agent` participant that launches the BMAD interview when you say `start bmad project`.
 - Structured prompts for each BMAD phase stored under `src/resources/prompts`.
@@ -53,6 +65,9 @@ BMAD Agent wraps the [BMAD-METHOD](https://github.com/bmad-code-org/BMAD-METHOD)
   - `BMAD_PLAN.md` – a phase-by-phase summary of your responses with deliverables and follow-up prompts.
   - `bmad-context.json` – structured JSON capturing all answers.
   - `TASKS.todo.md` – a checklist combining BMAD phase checklists with your captured context.
+- IDE-specific configuration is also generated automatically:
+  - `.cursor/rules/bmad-project-context.mdc` – Cursor AI agent context derived from your BMAD answers.
+  - `.agents/rules/bmad-project-context.md` – Google Antigravity agent context derived from your BMAD answers.
 - Use `BMAD: Refine Current Phase` anytime to open detailed guidance, deliverables, and references for a specific phase.
 
 ## Custom Models with LM Studio
@@ -62,6 +77,24 @@ BMAD Agent wraps the [BMAD-METHOD](https://github.com/bmad-code-org/BMAD-METHOD)
 4. Choose the desired access mode (Read-only, Workspace, or Full access). Selecting **Full access** requires explicit confirmation so you understand the risks of granting the agent broad filesystem control.
 5. Trigger `@bmad.agent start bmad project` in Copilot Chat to capture context. When LM Studio processes the summary it can emit `record_task` tool calls; the extension queues them, surfaces the backlog in both views, and keeps the transcript hydrated.
 6. Use the `Copy BMAD context` button or mention `@bmad-lmchat` within the Copilot window to pull the latest LM Studio response, summary, and queued tasks back into Copilot for further prompting.
+
+## Using with Cursor IDE
+
+Since Cursor is a VS Code fork, the BMAD Agent extension runs natively.
+
+1. Install the extension in Cursor (via VSIX or from source) the same way as VS Code.
+2. The repository includes `.cursorrules` and `.cursor/rules/*.mdc` files that give Cursor's AI agent full awareness of the project architecture, coding standards, and testing patterns.
+3. When you run `BMAD: Generate Scaffolding`, a `.cursor/rules/bmad-project-context.mdc` file is generated alongside the standard scaffolding — this injects your BMAD answers directly into Cursor's AI context.
+4. Cursor's agent can reference the rule files when suggesting code changes, planning features, or answering questions about the project.
+
+## Using with Google Antigravity IDE
+
+Since Antigravity is a VS Code fork, the BMAD Agent extension runs natively.
+
+1. Install the extension in Antigravity (via VSIX or from source) the same way as VS Code.
+2. The repository includes `.agents/rules/*.md` and `.agents/workflows/*.md` files that guide Antigravity's AI agents with project context, quality rules, and build workflows.
+3. When you run `BMAD: Generate Scaffolding`, a `.agents/rules/bmad-project-context.md` file is generated alongside the standard scaffolding — this injects your BMAD answers directly into Antigravity's agent rules.
+4. Antigravity agents can reference these rules when planning tasks, generating code, or orchestrating multi-step workflows.
 
 ## Testing & Smoke Checks
 - Unit / integration harness:
@@ -96,3 +129,5 @@ BMAD resources in `src/resources/` mirror the open-source BMAD-METHOD documentat
 - Persist session answers between runs and surface them in a dedicated view.
 - Deepen Copilot hand-off by streaming BMAD-derived tool invocations.
 - Add more robust tests covering Copilot delegation and LM Studio integration.
+- Align with upstream BMAD-METHOD v6 skill and workflow conventions.
+- Expand IDE-specific rule generation for new AI-powered editors as they emerge.

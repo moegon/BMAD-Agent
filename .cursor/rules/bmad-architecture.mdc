@@ -1,0 +1,47 @@
+---
+description: BMAD Agent extension architecture and module structure
+globs: src/**/*.ts
+alwaysApply: false
+---
+
+# BMAD Agent Architecture
+
+## Module Responsibilities
+
+| Module | Purpose |
+|--------|---------|
+| `extension.ts` | Activation, chat participant registration, command wiring |
+| `bmadResources.ts` | Phase definitions (questions, deliverables, checklists) |
+| `copilotBridge.ts` | Prompt construction and Copilot LLM delegation |
+| `lmStudioClient.ts` | HTTP client for LM Studio (OpenAI-compatible) |
+| `lmChatContext.ts` | Persistent LM Studio conversation storage |
+| `lmChatViewProvider.ts` | Webview provider for LM Studio Chat panel |
+| `sidebarProvider.ts` | Webview provider for BMAD Control Panel |
+| `scaffolding.ts` | Workspace artifact generation (plan, context, tasks, IDE configs) |
+| `accessControl.ts` | Access mode types (read / workspace / full) |
+| `modelSelection.ts` | Model configuration and selection logic |
+| `resourceLoader.ts` | JSON resource file loading from dist/ |
+| `storageKeys.ts` | Centralised workspace/global state key constants |
+| `taskQueue.ts` | In-memory + persisted task queue for LM Studio tool calls |
+
+## Data Flow
+
+```
+User answers (4 phases) → CollectedAnswers
+  → copilotBridge.buildPrompt() → Copilot LLM
+  → lmStudioClient.sendChat() → LM Studio
+  → scaffolding.generateBmAdScaffolding() → workspace files
+```
+
+## Extension Points
+
+- Chat participants are registered via `contributes.chatParticipants` in `package.json`.
+- Webview providers implement `vscode.WebviewViewProvider`.
+- Commands are registered in `activate()` and declared in `contributes.commands`.
+
+## Important Patterns
+
+- Conversations are tracked via a `WeakMap<vscode.ChatContext, string>` for memory efficiency.
+- The Copilot bridge maintains an LRU model cache (max 5 per conversation).
+- LM Studio requests include `just_in_time: true` for on-demand context rehydration.
+- Resources are copied from `src/resources/` to `dist/resources/` during build.

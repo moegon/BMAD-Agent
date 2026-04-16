@@ -1,0 +1,54 @@
+# BMAD Agent — Cursor Rules
+
+You are working on the **BMAD Agent** VS Code extension, which wraps the
+[BMAD-METHOD](https://github.com/bmad-code-org/BMAD-METHOD) into a GitHub
+Copilot Chat participant.
+
+## Project Overview
+
+BMAD Agent guides users through a structured four-phase intake:
+**Brainstorm → Map → Assemble → Deploy**. It then pipes captured context into
+GitHub Copilot or a custom LM Studio model to kick-start delivery.
+
+## Architecture
+
+- **Extension entry point**: `src/extension.ts`
+- **Chat participants**: `@bmad.agent` (intake flow) and `@bmad.lmchat` (context bridge)
+- **Webview providers**: `sidebarProvider.ts` (Control Panel) and `lmChatViewProvider.ts` (LM Studio Chat)
+- **Copilot bridge**: `copilotBridge.ts` — builds prompts and delegates to `vscode.lm`
+- **LM Studio client**: `lmStudioClient.ts` — HTTP client for OpenAI-compatible endpoints
+- **Scaffolding**: `scaffolding.ts` — generates `bmad/` workspace artifacts
+- **Resources**: `src/resources/prompts/*.json` — phase-specific guidance loaded at runtime
+
+## Key Conventions
+
+- TypeScript strict mode (`tsconfig.json`).
+- All VS Code API interactions use `vscode.workspace.fs` for safe, async file I/O.
+- Webview HTML is embedded inline in TypeScript with nonce-based CSP headers.
+- Storage uses `vscode.ExtensionContext.workspaceState` and `globalState`.
+- Phase identifiers are typed via the `PhaseId` union (`"brainstorm" | "map" | "assemble" | "deploy"`).
+
+## Build & Test
+
+```bash
+npm install
+npm run compile   # tsc + copy resources to dist/
+npm run lint      # eslint
+npm run test      # Electron-based integration tests
+npm run smoke     # headless smoke check
+```
+
+## Coding Standards
+
+- Prefer `const` over `let`; avoid `var`.
+- Use explicit return types on exported functions.
+- Keep inline HTML strings colocated with their webview provider.
+- Document public APIs with JSDoc when the intent is non-obvious.
+- Do not commit secrets or API keys.
+
+## BMAD-METHOD Alignment
+
+This extension mirrors concepts from the upstream BMAD-METHOD v6:
+- Four delivery phases map to BMAD's Analysis → Planning → Solutioning → Implementation.
+- Scaffolding output aligns with `_bmad-output/` conventions.
+- Agent skills reference patterns like `bmad-help`, `bmad-create-prd`, etc.
