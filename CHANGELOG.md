@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html) where possible (pre-1.0 releases may introduce breaking changes between minors).
 
+## [0.0.3] - 2026-04-16
+### Added
+- **Cursor IDE support**: `.cursorrules` file and `.cursor/rules/*.mdc` rule files that give Cursor's AI agent full project awareness (architecture, coding standards, testing patterns).
+- **Google Antigravity IDE support**: `.agents/rules/*.md` rule files and `.agents/workflows/*.md` workflow files that guide Antigravity's AI agents with project context, quality rules, and build workflows.
+- Scaffolding now generates IDE-specific configuration files alongside existing artifacts:
+  - `.cursor/rules/bmad-project-context.mdc` — Cursor context derived from BMAD answers.
+  - `.agents/rules/bmad-project-context.md` — Antigravity context derived from BMAD answers.
+
+### Changed
+- README expanded with IDE support matrix, Cursor usage guide, and Antigravity usage guide.
+- Scaffolding section of README updated to document IDE config generation.
+- Roadmap updated to include upstream BMAD-METHOD v6 alignment and multi-IDE expansion goals.
+
+### Fixed
+- Resolved npm audit vulnerabilities in dev dependencies where non-breaking fixes were available.
+
 ## [0.0.2] - 2025-11-02
 ### Added
 - Activity Bar **BMAD Control** view with access mode controls, LM Studio model discovery, and Copilot hand-off helper.
@@ -26,5 +42,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Scaffolding generator that emits BMAD deliverables into the workspace.
 - LM Studio smoke harness for offline development.
 
+[0.0.3]: https://github.com/bmad-code-org/BMAD-Agent/releases/tag/v0.0.3
 [0.0.2]: https://github.com/gpurig/bmad-agent/releases/tag/v0.0.2
 [0.0.1]: https://github.com/gpurig/bmad-agent/releases/tag/v0.0.1

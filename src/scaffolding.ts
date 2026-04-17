@@ -58,6 +58,85 @@ function convertAnswersToMarkdown(answers: CollectedAnswers): string {
   return lines.join("\n").trim() + "\n";
 }
 
+function generateCursorRules(answers: CollectedAnswers): string {
+  const summary = renderSummary(answers).trim();
+  const lines: string[] = [
+    "# BMAD Project Context",
+    "",
+    "This project was scaffolded using the BMAD-METHOD (Brainstorm → Map → Assemble → Deploy).",
+    "",
+    "## Project Summary",
+    "",
+    summary,
+    "",
+    "## BMAD Phases",
+    ""
+  ];
+
+  for (const phase of bmadPhases) {
+    const answerEntries = Object.entries(answers[phase.id] ?? {});
+    if (!answerEntries.length) {
+      continue;
+    }
+    const questionLookup = new Map(phase.questions.map((q) => [q.id, q.prompt]));
+    lines.push(`### ${phase.title}`);
+    lines.push("");
+    for (const [id, value] of answerEntries) {
+      const prompt = questionLookup.get(id) ?? id;
+      lines.push(`- **${prompt}**: ${value}`);
+    }
+    lines.push("");
+  }
+
+  lines.push("## Guidelines");
+  lines.push("");
+  lines.push("- Follow the BMAD delivery plan in `bmad/BMAD_PLAN.md`.");
+  lines.push("- Track progress using `bmad/TASKS.todo.md`.");
+  lines.push("- Consult `bmad/bmad-context.json` for structured project context.");
+  lines.push("");
+
+  return lines.join("\n").trim() + "\n";
+}
+
+function generateAntigravityRules(answers: CollectedAnswers): string {
+  const summary = renderSummary(answers).trim();
+  const lines: string[] = [
+    "# BMAD Project Context",
+    "",
+    "This project was scaffolded using the BMAD-METHOD (Brainstorm → Map → Assemble → Deploy).",
+    "",
+    "## Project Summary",
+    "",
+    summary,
+    "",
+    "## Key References",
+    "",
+    "- Delivery plan: `bmad/BMAD_PLAN.md`",
+    "- Structured context: `bmad/bmad-context.json`",
+    "- Task checklist: `bmad/TASKS.todo.md`",
+    "",
+    "## Captured Decisions",
+    ""
+  ];
+
+  for (const phase of bmadPhases) {
+    const answerEntries = Object.entries(answers[phase.id] ?? {});
+    if (!answerEntries.length) {
+      continue;
+    }
+    const questionLookup = new Map(phase.questions.map((q) => [q.id, q.prompt]));
+    lines.push(`### ${phase.title}`);
+    lines.push("");
+    for (const [id, value] of answerEntries) {
+      const prompt = questionLookup.get(id) ?? id;
+      lines.push(`- **${prompt}**: ${value}`);
+    }
+    lines.push("");
+  }
+
+  return lines.join("\n").trim() + "\n";
+}
+
 function convertAnswersToTasks(answers: CollectedAnswers): string {
   const timestamp = new Date().toISOString();
   const lines: string[] = [
@@ -153,7 +232,16 @@ export async function generateBmAdScaffolding(answers: CollectedAnswers): Promis
   const contextUri = vscode.Uri.joinPath(outputDir, "bmad-context.json");
   const tasksUri = vscode.Uri.joinPath(outputDir, "TASKS.todo.md");
 
-  const shouldProceed = await confirmOverwrite([planUri, contextUri, tasksUri]);
+  // Cursor IDE config
+  const cursorRulesDir = vscode.Uri.joinPath(targetFolder, ".cursor", "rules");
+  const cursorRulesUri = vscode.Uri.joinPath(cursorRulesDir, "bmad-project-context.mdc");
+
+  // Antigravity IDE config
+  const agentsRulesDir = vscode.Uri.joinPath(targetFolder, ".agents", "rules");
+  const agentsRulesUri = vscode.Uri.joinPath(agentsRulesDir, "bmad-project-context.md");
+
+  const allFiles = [planUri, contextUri, tasksUri, cursorRulesUri, agentsRulesUri];
+  const shouldProceed = await confirmOverwrite(allFiles);
   if (!shouldProceed) {
     vscode.window.showInformationMessage("Skipped overwriting existing BMAD scaffolding files.");
     return;
@@ -162,10 +250,14 @@ export async function generateBmAdScaffolding(answers: CollectedAnswers): Promis
   const artifacts: FileArtifact[] = [
     { uri: planUri, contents: convertAnswersToMarkdown(answers) },
     { uri: contextUri, contents: JSON.stringify(answers, null, 2) + "\n" },
-    { uri: tasksUri, contents: convertAnswersToTasks(answers) }
+    { uri: tasksUri, contents: convertAnswersToTasks(answers) },
+    { uri: cursorRulesUri, contents: generateCursorRules(answers) },
+    { uri: agentsRulesUri, contents: generateAntigravityRules(answers) }
   ];
 
   await vscode.workspace.fs.createDirectory(outputDir);
+  await vscode.workspace.fs.createDirectory(cursorRulesDir);
+  await vscode.workspace.fs.createDirectory(agentsRulesDir);
   for (const artifact of artifacts) {
     const directoryUri = vscode.Uri.file(path.dirname(artifact.uri.fsPath));
     await vscode.workspace.fs.createDirectory(directoryUri);
@@ -177,5 +269,7 @@ export async function generateBmAdScaffolding(answers: CollectedAnswers): Promis
 
   const doc = await vscode.workspace.openTextDocument(planUri);
   await vscode.window.showTextDocument(doc);
-  vscode.window.showInformationMessage(`BMAD scaffolding created in ${outputDir.fsPath}`);
+  vscode.window.showInformationMessage(
+    `BMAD scaffolding created in ${outputDir.fsPath} (includes Cursor and Antigravity IDE configs)`
+  );
 }

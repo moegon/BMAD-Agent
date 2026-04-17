@@ -1,0 +1,37 @@
+---
+description: Testing patterns and requirements for BMAD Agent
+globs: src/test/**/*.ts, scripts/**/*.js
+alwaysApply: false
+---
+
+# BMAD Agent Testing
+
+## Test Structure
+
+- Integration tests: `src/test/suite/*.test.ts` — run inside VS Code Electron host.
+- Smoke tests: `scripts/smoke.js` — headless VS Code instance verifying command registration.
+- LM Studio smoke: `scripts/smokeLmStudio.js` — offline mock of LM Studio tool-call parsing.
+
+## Running Tests
+
+```bash
+npm run test           # Full Electron-based test suite
+npm run smoke          # Quick headless smoke check
+npm run smoke:lmstudio # LM Studio mock validation
+```
+
+## Writing Tests
+
+- New test files go in `src/test/suite/` with the `.test.ts` extension.
+- Tests are discovered by Mocha via glob (`**/**.test.js` in compiled output).
+- Each test file should import `assert` from Node's built-in `assert` module.
+- Mock the `vscode` namespace when testing outside the Extension Development Host.
+
+## What to Test
+
+- Command registration and activation.
+- Phase data integrity (all phases have questions, deliverables, checklists).
+- Prompt construction (copilotBridge output format).
+- Scaffolding file generation (correct markdown/JSON output).
+- LM Studio tool-call parsing (task extraction from JSON responses).
+- IDE config generation for Cursor and Antigravity.

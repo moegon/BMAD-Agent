@@ -1,0 +1,42 @@
+---
+description: Coding standards and conventions for BMAD Agent development
+globs: src/**/*.ts, scripts/**/*.js
+alwaysApply: true
+---
+
+# BMAD Agent Coding Standards
+
+## TypeScript
+
+- Target ES2020, CommonJS modules, strict mode enabled.
+- Prefer `const`; use `let` only when reassignment is required.
+- Use explicit return types on all exported functions.
+- Use the `PhaseId` union type for phase identifiers — never raw strings.
+- Prefer `interface` for object shapes; use `type` for unions and intersections.
+
+## VS Code API
+
+- Use `vscode.workspace.fs` for all file system operations (not Node `fs`).
+- Use `vscode.ExtensionContext.workspaceState` / `globalState` for persistence.
+- Webview HTML must include a nonce-based Content Security Policy.
+- Always dispose registered disposables in the `deactivate()` path or via `context.subscriptions`.
+
+## Error Handling
+
+- Surface user-facing errors via `vscode.window.showErrorMessage()`.
+- Log internal diagnostics to `console.warn()` / `console.error()`.
+- Never silently swallow errors — at minimum log them.
+
+## Testing
+
+- Unit/integration tests live under `src/test/`.
+- Smoke tests live under `scripts/`.
+- Run `npm run compile` before `npm run test` or `npm run smoke`.
+- Use `ELECTRON_DISABLE_SANDBOX=1` in containerised environments.
+
+## Security
+
+- Never commit API keys, tokens, or secrets.
+- Webview scripts must use nonce-based CSP.
+- Access mode escalation (to "full") requires explicit user confirmation.
+- LM Studio API keys are stored in VS Code settings, not in source.
